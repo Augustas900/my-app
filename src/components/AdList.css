@@ -1,0 +1,16 @@
+.ad-list {
+    margin: 20px;
+}
+
+.ad-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.ad-image {
+    max-width: 100%; /* Make images responsive */
+    height: auto; /* Maintain aspect ratio */
+    margin-top: 10px;
+}
