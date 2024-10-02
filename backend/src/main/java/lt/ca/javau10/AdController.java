@@ -66,25 +66,18 @@ public class AdController {
         adService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-    @PostMapping("/uploadImage")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
-        try {
-            // Define directory where images will be stored
-            String uploadDirectory = "C:/Users/Augus/OneDrive/Stalinis kompiuteris/Codeacademy/uploads/";
-            File directory = new File(uploadDirectory);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-
-            // Save the image file
-            String filePath = uploadDirectory + file.getOriginalFilename();
-            file.transferTo(new File(filePath));
-
-            return ResponseEntity.ok("File uploaded successfully: " + filePath);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload file: " + e.getMessage());
-        }
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+        // Logic to save the file (e.g., to the filesystem or database)
+        String fileName = fileStorageService.storeFile(file);
+        return ResponseEntity.ok(new ResponseMessage("Uploaded the file successfully: " + fileName));
     }
-
+    @GetMapping("/images/{filename:.+}")
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+        Resource file = fileStorageService.loadFileAsResource(filename);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG) // Adjust based on your image type
+                .body(file);
+    }
 
 }
