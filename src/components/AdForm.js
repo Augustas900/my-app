@@ -6,6 +6,8 @@ const AdForm = ({ categories }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
+    const [customCategory, setCustomCategory] = useState(''); // For custom category input
+    const [isCustomCategory, setIsCustomCategory] = useState(false); // Toggle for custom category
     const [price, setPrice] = useState('');
     const [image, setImage] = useState(null); // State for image
     const [listingType, setListingType] = useState('RENT'); // Default to Rent
@@ -25,13 +27,17 @@ const AdForm = ({ categories }) => {
                 imageUrl = uploadResponse.data; // Adjust this based on your API response
             }
 
+            // Use custom category if provided, otherwise use the selected category
+            const adCategory = isCustomCategory ? customCategory : category;
+
             // Create the ad
-            const ad = { title, description, category, price, listingType, imageUrl };
+            const ad = { title, description, category: adCategory, price, listingType, imageUrl };
             await createAd(ad);
             // Clear the form
             setTitle('');
             setDescription('');
             setCategory('');
+            setCustomCategory('');
             setPrice('');
             setImage(null);
         } catch (error) {
@@ -68,19 +74,39 @@ const AdForm = ({ categories }) => {
                 </div>
                 <div className="form-group">
                     <label>Category</label>
-                    <select
-                        className="form-control"
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                        required
-                    >
-                        <option value="">Select a category</option>
-                        {categories.map((cat, index) => (
-                            <option key={index} value={cat}>
-                                {cat}
-                            </option>
-                        ))}
-                    </select>
+                    {isCustomCategory ? (
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={customCategory}
+                            onChange={(e) => setCustomCategory(e.target.value)}
+                            placeholder="Enter custom category"
+                            required
+                        />
+                    ) : (
+                        <select
+                            className="form-control"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            required
+                        >
+                            <option value="">Select a category</option>
+                            {categories.map((cat, index) => (
+                                <option key={index} value={cat}>
+                                    {cat}
+                                </option>
+                            ))}
+                        </select>
+                    )}
+                    <div className="form-check">
+                        <input
+                            type="checkbox"
+                            className="form-check-input"
+                            checked={isCustomCategory}
+                            onChange={() => setIsCustomCategory(!isCustomCategory)}
+                        />
+                        <label className="form-check-label">Add custom category</label>
+                    </div>
                 </div>
                 <div className="form-group">
                     <label>Price</label>

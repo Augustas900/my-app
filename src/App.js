@@ -13,9 +13,9 @@ const App = () => {
     return (
         <div>
             <h1></h1>
-            <AdForm categories={["Category1", "Category2"]} /> {/* Pass categories as props */}
+            <AdForm categories={["Item for Sale or Rent", "Vehicle for Sale or Rent", "House for Sale or Rent"]} /> {/* Pass categories as props */}
             <AdList />
-            
+
         </div>
     );
 };
